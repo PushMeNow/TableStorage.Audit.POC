@@ -1,0 +1,3 @@
+[submodule "EntityFramework-Plus"]
+	path = EntityFramework-Plus
+	url = https://github.com/PushMeNow/EntityFramework-Plus
