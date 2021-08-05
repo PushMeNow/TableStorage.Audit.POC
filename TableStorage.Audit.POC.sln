@@ -4,6 +4,8 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "TableStorage.Audit.POC", "T
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "TableStorage.Audit.BLL", "TableStorage.Audit.BLL\TableStorage.Audit.BLL.csproj", "{198D7151-9832-41AE-9388-CF4A6600C5A4}"
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Z.EntityFramework.Plus.EFCore3x.NETStandard21", "EntityFramework-Plus\src\Z.EntityFramework.Plus.EFCore3x.NETStandard21\Z.EntityFramework.Plus.EFCore3x.NETStandard21.csproj", "{7EFE7542-BFC0-4F6F-B6A3-1D60299D46D1}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -18,5 +20,9 @@ Global
 		{198D7151-9832-41AE-9388-CF4A6600C5A4}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{198D7151-9832-41AE-9388-CF4A6600C5A4}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{198D7151-9832-41AE-9388-CF4A6600C5A4}.Release|Any CPU.Build.0 = Release|Any CPU
+		{7EFE7542-BFC0-4F6F-B6A3-1D60299D46D1}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{7EFE7542-BFC0-4F6F-B6A3-1D60299D46D1}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{7EFE7542-BFC0-4F6F-B6A3-1D60299D46D1}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{7EFE7542-BFC0-4F6F-B6A3-1D60299D46D1}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 EndGlobal
