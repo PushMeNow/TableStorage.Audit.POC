@@ -6,7 +6,12 @@
 
     <ItemGroup>
       <ProjectReference Include="..\EntityFramework-Plus\src\Z.EntityFramework.Plus.EFCore3x.NETStandard21\Z.EntityFramework.Plus.EFCore3x.NETStandard21.csproj" />
-      <ProjectReference Include="..\TableStorage.Audit.DAL\TableStorage.Audit.DAL.csproj" />
+    </ItemGroup>
+
+    <ItemGroup>
+      <PackageReference Include="Microsoft.Azure.Cosmos.Table" Version="1.0.8" />
+      <PackageReference Include="Microsoft.EntityFrameworkCore" Version="5.0.8" />
+      <PackageReference Include="Microsoft.EntityFrameworkCore.SqlServer" Version="5.0.8" />
     </ItemGroup>
 
 </Project>

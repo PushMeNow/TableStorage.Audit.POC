@@ -1,6 +1,6 @@
 ﻿using Microsoft.Azure.Cosmos.Table;
 
-namespace TableStorage.Audit.BLL
+namespace TableStorage.Audit.DAL
 {
     public class TableStorageAccountProvider : ITableStorageAccountProvider
     {

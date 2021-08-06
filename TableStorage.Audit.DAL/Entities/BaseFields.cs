@@ -1,8 +1,8 @@
 ﻿using System;
 
-namespace TableStorage.Audit.BLL.Entities
+namespace TableStorage.Audit.DAL.Entities
 {
-    public class BaseFields
+    public abstract class BaseFields
     {
         public DateTime CreatedDate { get; set; }
 

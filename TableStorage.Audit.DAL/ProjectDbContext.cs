@@ -1,12 +1,13 @@
 ﻿using System;
 using System.Linq;
+using System.Reflection;
 using System.Threading;
 using System.Threading.Tasks;
 using Microsoft.EntityFrameworkCore;
-using TableStorage.Audit.BLL.Entities;
+using TableStorage.Audit.DAL.Entities;
 using Z.EntityFramework.Plus;
 
-namespace TableStorage.Audit.BLL
+namespace TableStorage.Audit.DAL
 {
     public class ProjectDbContext : DbContext
     {
@@ -15,7 +16,18 @@ namespace TableStorage.Audit.BLL
             StorageAccountProvider = storageAccountProvider;
         }
 
+        public DbSet<User> Users { get; set; }
+
+        public DbSet<Address> Addresses { get; set; }
+
         public ITableStorageAccountProvider StorageAccountProvider { get; }
+
+        protected override void OnModelCreating(ModelBuilder modelBuilder)
+        {
+            base.OnModelCreating(modelBuilder);
+
+            modelBuilder.ApplyConfigurationsFromAssembly(Assembly.GetExecutingAssembly());
+        }
 
         public override int SaveChanges()
         {

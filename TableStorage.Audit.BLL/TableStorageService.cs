@@ -1,4 +1,6 @@
-﻿namespace TableStorage.Audit.BLL
+﻿using TableStorage.Audit.DAL;
+
+namespace TableStorage.Audit.BLL
 {
     public class TableStorageService
     {

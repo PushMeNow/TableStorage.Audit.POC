@@ -1,24 +1,20 @@
 using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Threading.Tasks;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
-using Microsoft.AspNetCore.HttpsPolicy;
 using Microsoft.Azure.Cosmos.Table;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
-using TableStorage.Audit.BLL;
+using TableStorage.Audit.DAL;
 using Z.EntityFramework.Plus;
 
 namespace TableStorage.Audit.POC
 {
     public class Startup
     {
-        private readonly string _tableStorageConnString;
         private readonly string _databaseConnString;
+        private readonly string _tableStorageConnString;
 
         public Startup(IConfiguration configuration)
         {
@@ -34,7 +30,8 @@ namespace TableStorage.Audit.POC
             services.AddControllersWithViews();
 
             services.AddSingleton<ITableStorageAccountProvider, TableStorageAccountProvider>(_ => new TableStorageAccountProvider(_tableStorageConnString));
-            services.AddDbContext<ProjectDbContext>(q => q.UseSqlServer(_databaseConnString, w => w.MigrationsAssembly("TableStorage.Audit.BLL")));
+            services.AddDbContext<ProjectDbContext>(q => q.UseSqlServer(_databaseConnString,
+                                                                        w => w.MigrationsAssembly(typeof(ProjectDbContext).Assembly.FullName)));
 
             ConfigureAudit();
         }
