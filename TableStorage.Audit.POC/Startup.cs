@@ -6,6 +6,9 @@ using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
+using TableStorage.Audit.BLL;
+using TableStorage.Audit.BLL.Interfaces;
+using TableStorage.Audit.BLL.MapperProfiles;
 using TableStorage.Audit.DAL;
 using Z.EntityFramework.Plus;
 
@@ -33,6 +36,13 @@ namespace TableStorage.Audit.POC
             services.AddDbContext<ProjectDbContext>(q => q.UseSqlServer(_databaseConnString,
                                                                         w => w.MigrationsAssembly(typeof(ProjectDbContext).Assembly.FullName)));
 
+            services.AddScoped<IUserService, UserService>();
+
+            services.AddAutoMapper(typeof(UserProfile).Assembly);
+
+            services.AddRazorPages()
+                    .AddRazorRuntimeCompilation();
+
             ConfigureAudit();
         }
 
@@ -48,6 +58,7 @@ namespace TableStorage.Audit.POC
             app.UseAuthorization();
             app.UseEndpoints(endpoints =>
                              {
+                                 endpoints.MapControllers();
                                  endpoints.MapDefaultControllerRoute();
                              });
         }
