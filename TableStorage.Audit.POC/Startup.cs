@@ -1,4 +1,5 @@
 using System;
+using System.Text.Json.Serialization;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.Azure.Cosmos.Table;
@@ -9,6 +10,7 @@ using Microsoft.Extensions.Hosting;
 using TableStorage.Audit.BLL;
 using TableStorage.Audit.BLL.Interfaces;
 using TableStorage.Audit.BLL.MapperProfiles;
+using TableStorage.Audit.BLL.Services;
 using TableStorage.Audit.DAL;
 using Z.EntityFramework.Plus;
 
@@ -30,13 +32,18 @@ namespace TableStorage.Audit.POC
 
         public void ConfigureServices(IServiceCollection services)
         {
-            services.AddControllersWithViews();
+            services.AddControllersWithViews()
+                    .AddJsonOptions(options =>
+                                    {
+                                        options.JsonSerializerOptions.Converters.Add(new JsonStringEnumConverter());
+                                    });
 
             services.AddSingleton<ITableStorageAccountProvider, TableStorageAccountProvider>(_ => new TableStorageAccountProvider(_tableStorageConnString));
             services.AddDbContext<ProjectDbContext>(q => q.UseSqlServer(_databaseConnString,
                                                                         w => w.MigrationsAssembly(typeof(ProjectDbContext).Assembly.FullName)));
 
             services.AddScoped<IUserService, UserService>();
+            services.AddScoped<ITableStorageService, TableStorageService>();
 
             services.AddAutoMapper(typeof(UserProfile).Assembly);
 
@@ -77,18 +84,13 @@ namespace TableStorage.Audit.POC
                                                                                };
             AuditManager.DefaultConfiguration.AutoSavePreAction = (context, audit) =>
                                                                   {
-                                                                      const string auditEntryTableName = "AuditEntries";
-                                                                      const string auditEntryPropertyTableName = "AuditEntryProperties";
-
                                                                       var castedContext = (ProjectDbContext)context;
                                                                       var client = castedContext.StorageAccountProvider
                                                                                                 .GetStorageAccount()
                                                                                                 .CreateCloudTableClient(new TableClientConfiguration());
-                                                                      var auditEntryTable = client.GetTableReference(auditEntryTableName);
-                                                                      var auditEntryPropertyTable = client.GetTableReference(auditEntryPropertyTableName);
-
-                                                                      auditEntryTable.CreateIfNotExists();
-                                                                      auditEntryPropertyTable.CreateIfNotExists();
+                                                                      var auditEntryTable = client.GetTableReference(Constants.AuditEntryTableName);
+                                                                      var auditEntryPropertyTable =
+                                                                          client.GetTableReference(Constants.AuditEntryPropertyTableName);
 
                                                                       var entryBatch = new TableBatchOperation();
                                                                       var entryPropertyBatch = new TableBatchOperation();

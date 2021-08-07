@@ -8,7 +8,7 @@ using TableStorage.Audit.DAL;
 using TableStorage.Audit.DAL.Entities;
 using TableStorage.Audit.Exceptions;
 
-namespace TableStorage.Audit.BLL
+namespace TableStorage.Audit.BLL.Services
 {
     public abstract class ServiceBase<TEntity, TRequest, TResponse> : IService<TRequest, TResponse>
         where TEntity : BaseFields

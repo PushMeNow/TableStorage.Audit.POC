@@ -1,22 +1,23 @@
 ﻿'use strict';
 
 $(document).ready(function () {
-    const userTable = $('#users-table')
+// ------------------------------ User ----------------------------------
+
+    const userTableElement = $('#users-table')
     const userModal = new bootstrap.Modal(document.getElementById('user-modal-window'));
     const saveUserBtn = document.getElementById('save-user-data');
     const userForm = document.getElementById('user-form');
-    
+
     let saveUserHandler = null;
 
-    const table = userTable
+    const userDataTable = userTableElement
         .DataTable({
                        paging: false,
                        searching: false,
                        sorting: false,
                        ajax: {
                            url: '/user',
-                           dataSrc: '',
-
+                           dataSrc: ''
                        },
                        columns: [
                            { data: 'firstName', title: 'First Name', orderable: false },
@@ -28,7 +29,7 @@ $(document).ready(function () {
                                render: (data, type, row, meta) => {
                                    return '<div class="btn-group" role="group">' +
                                        '<button type="button" class="btn btn-outline-dark update-user">Update</button>' +
-                                       '<button type="button" class="btn btn-outline-danger delete-user">Delete</button>' + 
+                                       '<button type="button" class="btn btn-outline-danger delete-user">Delete</button>' +
                                        '</div>';
                                },
                                className: 'text-center',
@@ -87,25 +88,113 @@ $(document).ready(function () {
     };
     const defaultFormCallback = () => {
         userModal.hide();
-        table.ajax.reload()
+        userDataTable.ajax.reload()
+    }
+    const getReloadBtnHandler = (dataTable) => {
+      return (event) => {
+          const spinnerClass = 'fa-spin';
+          const reloadButton = event.currentTarget;
+          const icon = reloadButton.getElementsByTagName('i')[0];
+
+          reloadButton.disabled = true;
+          icon.classList.add(spinnerClass);
+
+          dataTable.ajax.reload(() => {
+              reloadButton.disabled = false;
+              icon.classList.remove(spinnerClass);
+          });
+      }
     }
 
+    document.getElementById('reload-users-table').addEventListener('click', getReloadBtnHandler(userDataTable));
     document.getElementById('add-user').addEventListener('click', () => {
         prepareUserForm(() => createUser(defaultFormCallback));
         userModal.show();
     });
-    userTable.on('click', 'button.update-user', (event) => {
-        let rowData = table.row($(event.target.closest('tr'))).data();
+    userTableElement.on('click', 'button.update-user', (event) => {
+        let rowData = userDataTable.row($(event.target.closest('tr'))).data();
         prepareUserForm(() => {
             updateUser(rowData.userId, defaultFormCallback);
         });
         fillUserForm(rowData);
         userModal.show();
     });
-    userTable.on('click', 'button.delete-user', (event) => {
-        let rowData = table.row($(event.target.closest('tr'))).data();
-        if (confirm(`Confirm you want to delete user ${rowData.firstName} ${rowData.lastName}`)){
-            deleteUser(rowData.userId, table.ajax.reload);
+    userTableElement.on('click', 'button.delete-user', (event) => {
+        let rowData = userDataTable.row($(event.target.closest('tr'))).data();
+        if (confirm(`Confirm you want to delete user ${ rowData.firstName } ${ rowData.lastName }`)) {
+            deleteUser(rowData.userId, userDataTable.ajax.reload);
         }
     });
+
+// ------------------------------ Audit ----------------------------------
+
+    const auditTableElement = $('#audit-table');
+    const auditDataTable = auditTableElement
+        .DataTable({
+                       paging: false,
+                       searching: false,
+                       sorting: false,
+                       ajax: {
+                           url: '/audit',
+                           dataSrc: ''
+                       },
+                       columns: [
+                           {
+                               title: 'Show Properties',
+                               render: () => {
+                                   return '<a class="show-audit-properties" href="#"><i class="fas fa-arrow-right"></i></a>';
+                               }
+                           },
+                           { data: 'entityTypeName', title: 'Entity Type Name' },
+                           { data: 'createdDate', title: 'Created Date' },
+                           { data: 'state', title: 'State' },
+                       ],
+                       drawCallback: function () {
+                           let rows = this.api().rows();
+                           rows.every(function () {
+                               this.child(getAuditPropertiesTable(this.data().properties));
+                           });
+                       }
+                   });
+
+    const getAuditPropertiesTable = (properties) => {
+        let table = '<table class="table table-bordered table-striped">' +
+            '<thead>' +
+            '<th>Property Name</th>' +
+            '<th>Old Value</th>' +
+            '<th>New Value</th>' +
+            '</thead>' +
+            '<tbody>';
+
+        if (!properties.length) {
+            table += '<tr><td colspan="3">Nothing found</td></tr>>'
+        } else {
+            for (let property of properties) {
+                table += '<tr>' +
+                    `<td>${ property.propertyName }</td>` +
+                    `<td>${ property.oldValueFormatted }</td>` +
+                    `<td>${ property.newValueFormatted }</td>` +
+                    '</tr>';
+            }
+        }
+
+        table += '</tbody></table>';
+
+        return table;
+    }
+
+    auditDataTable.on('click', '.show-audit-properties', function (e) {
+        e.preventDefault();
+        
+        let row = auditDataTable.row($(this.closest('tr')));
+        let icon = e.currentTarget.getElementsByTagName('i')[0];
+        if (row.child.isShown()) {
+            icon.classList.replace('fa-arrow-down', 'fa-arrow-right')
+            row.child.hide();
+        } else {
+            icon.classList.replace('fa-arrow-right', 'fa-arrow-down')
+            row.child.show();
+        }
+    })
+    document.getElementById('reload-audit-table').addEventListener('click', getReloadBtnHandler(auditDataTable));
 });

@@ -1,4 +1,6 @@
-﻿const globalEventHandlers = {};
+﻿'use strict';
+
+const globalEventHandlers = {};
 const globalSpinner = $('#global-spinner');
 let ajaxCounter = 0;
 
