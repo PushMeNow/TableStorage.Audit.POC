@@ -26,8 +26,12 @@ $(document).ready(function () {
                            {
                                title: 'Actions',
                                render: (data, type, row, meta) => {
-                                   return '<button type="button" class="btn btn-primary update-user">Update</button>';
+                                   return '<div class="btn-group" role="group">' +
+                                       '<button type="button" class="btn btn-outline-dark update-user">Update</button>' +
+                                       '<button type="button" class="btn btn-outline-danger delete-user">Delete</button>' + 
+                                       '</div>';
                                },
+                               className: 'text-center',
                                orderable: false
                            }
                        ]
@@ -78,8 +82,8 @@ $(document).ready(function () {
         rebindSaveUserHandler(saveHandler);
     };
     const fillUserForm = (userData) => {
-        userForm.FirstName.value = userData.firstName;
-        userForm.LastName.value = userData.lastName;
+        userForm.FirstName.value = userData.firstName || '';
+        userForm.LastName.value = userData.lastName || '';
     };
     const defaultFormCallback = () => {
         userModal.hide();
@@ -97,5 +101,11 @@ $(document).ready(function () {
         });
         fillUserForm(rowData);
         userModal.show();
+    });
+    userTable.on('click', 'button.delete-user', (event) => {
+        let rowData = table.row($(event.target.closest('tr'))).data();
+        if (confirm(`Confirm you want to delete user ${rowData.firstName} ${rowData.lastName}`)){
+            deleteUser(rowData.userId, table.ajax.reload);
+        }
     });
 });
