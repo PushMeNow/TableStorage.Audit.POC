@@ -8,6 +8,10 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Z.EntityFramework.Plus.EFCo
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "TableStorage.Audit.DAL", "TableStorage.Audit.DAL\TableStorage.Audit.DAL.csproj", "{81DACC2A-A580-4974-8FEB-9BB2BBAECDCA}"
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "TableStorage.Audit.Exceptions", "TableStorage.Audit.Exceptions\TableStorage.Audit.Exceptions.csproj", "{6A732CE7-26A6-4FD5-8ACC-9E76583E604F}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "TableStorage.Audit.Common", "TableStorage.Audit.Common\TableStorage.Audit.Common.csproj", "{7B508B43-70B5-4B1E-8834-2501BA570146}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -30,5 +34,13 @@ Global
 		{81DACC2A-A580-4974-8FEB-9BB2BBAECDCA}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{81DACC2A-A580-4974-8FEB-9BB2BBAECDCA}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{81DACC2A-A580-4974-8FEB-9BB2BBAECDCA}.Release|Any CPU.Build.0 = Release|Any CPU
+		{6A732CE7-26A6-4FD5-8ACC-9E76583E604F}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{6A732CE7-26A6-4FD5-8ACC-9E76583E604F}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{6A732CE7-26A6-4FD5-8ACC-9E76583E604F}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{6A732CE7-26A6-4FD5-8ACC-9E76583E604F}.Release|Any CPU.Build.0 = Release|Any CPU
+		{7B508B43-70B5-4B1E-8834-2501BA570146}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{7B508B43-70B5-4B1E-8834-2501BA570146}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{7B508B43-70B5-4B1E-8834-2501BA570146}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{7B508B43-70B5-4B1E-8834-2501BA570146}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 EndGlobal

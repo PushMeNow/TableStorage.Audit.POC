@@ -7,6 +7,7 @@
     <ItemGroup>
       <ProjectReference Include="..\EntityFramework-Plus\src\Z.EntityFramework.Plus.EFCore3x.NETStandard21\Z.EntityFramework.Plus.EFCore3x.NETStandard21.csproj" />
       <ProjectReference Include="..\TableStorage.Audit.DAL\TableStorage.Audit.DAL.csproj" />
+      <ProjectReference Include="..\TableStorage.Audit.Exceptions\TableStorage.Audit.Exceptions.csproj" />
     </ItemGroup>
 
     <ItemGroup>

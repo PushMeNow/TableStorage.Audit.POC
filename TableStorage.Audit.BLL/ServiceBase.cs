@@ -6,6 +6,7 @@ using Microsoft.EntityFrameworkCore;
 using TableStorage.Audit.BLL.Interfaces;
 using TableStorage.Audit.DAL;
 using TableStorage.Audit.DAL.Entities;
+using TableStorage.Audit.Exceptions;
 
 namespace TableStorage.Audit.BLL
 {
@@ -35,11 +36,15 @@ namespace TableStorage.Audit.BLL
         {
             var entity = await Set.FindAsync(id);
 
+            Guard.ThrowObjectNotFoundIfEmpty(entity, Set.EntityType.Name);
+            
             return MapToResponse(entity);
         }
 
         public async Task<TResponse> Create(TRequest request)
         {
+            Guard.ThrowParameterInvalidIfEmpty(request, nameof(request));
+            
             var entity = _mapper.Map<TEntity>(request);
 
             await Set.AddAsync(entity);
@@ -50,8 +55,13 @@ namespace TableStorage.Audit.BLL
 
         public async Task<TResponse> Update(Guid id, TRequest request)
         {
+            Guard.ThrowParameterInvalidIfEmpty(id, nameof(id));
+            Guard.ThrowParameterInvalidIfEmpty(request, nameof(request));
+            
             var entity = await Set.FindAsync(id);
 
+            Guard.ThrowObjectNotFoundIfEmpty(entity, Set.EntityType.Name);
+            
             _mapper.Map(request, entity);
 
             await _context.SaveChangesAsync();
@@ -61,10 +71,13 @@ namespace TableStorage.Audit.BLL
 
         public async Task Delete(Guid id)
         {
+            Guard.ThrowParameterInvalidIfEmpty(id, nameof(id));
+            
             var entity = await Set.FindAsync(id);
 
-            Set.Remove(entity);
+            Guard.ThrowObjectNotFoundIfEmpty(entity, Set.EntityType.Name);
 
+            Set.Remove(entity);
             await _context.SaveChangesAsync();
         }
 

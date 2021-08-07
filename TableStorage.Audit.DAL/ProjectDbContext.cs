@@ -5,7 +5,6 @@ using System.Threading;
 using System.Threading.Tasks;
 using Microsoft.EntityFrameworkCore;
 using TableStorage.Audit.DAL.Entities;
-using Z.EntityFramework.Plus;
 
 namespace TableStorage.Audit.DAL
 {
@@ -32,13 +31,40 @@ namespace TableStorage.Audit.DAL
         public override int SaveChanges()
         {
             UpdateBaseFields();
-            return this.SaveChanges(new Z.EntityFramework.Plus.Audit());
+            var audit = new Z.EntityFramework.Plus.Audit();
+            audit.PreSaveChanges(this);
+            var rowAffecteds = base.SaveChanges();
+            audit.PostSaveChanges();
+
+            if (audit.Configuration.AutoSavePreAction == null)
+            {
+                return rowAffecteds;
+            }
+
+            audit.Configuration.AutoSavePreAction(this, audit);
+            base.SaveChanges();
+
+            return rowAffecteds;
         }
 
-        public override Task<int> SaveChangesAsync(CancellationToken cancellationToken = default)
+        public override async Task<int> SaveChangesAsync(CancellationToken cancellationToken = default)
         {
             UpdateBaseFields();
-            return this.SaveChangesAsync(new Z.EntityFramework.Plus.Audit(), default);
+
+            var audit = new Z.EntityFramework.Plus.Audit();
+            audit.PreSaveChanges(this);
+            var rowAffecteds = await base.SaveChangesAsync(cancellationToken);
+            audit.PostSaveChanges();
+
+            if (audit.Configuration.AutoSavePreAction == null)
+            {
+                return rowAffecteds;
+            }
+
+            audit.Configuration.AutoSavePreAction(this, audit);
+            await base.SaveChangesAsync(cancellationToken);
+
+            return rowAffecteds;
         }
 
         private void UpdateBaseFields()
